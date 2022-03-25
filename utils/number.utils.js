@@ -11,7 +11,6 @@ export const getRandomNumber = (max) => {
 
     // Checking Generated number's length.
     if (tempInt.toString().length == 4) {
-        console.log("Done", tempInt);
         return tempInt;
     }
 

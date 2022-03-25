@@ -28,7 +28,6 @@ export const generateReferId = (values) => {
 
     // Email
     tempId += `-${emailToString(values.email)}`;
-    console.log(tempId);
 
     // Here I got an issue in the first place of the generated ID.
     // To avoid faulty ID here I'm checking the newly generated ID.

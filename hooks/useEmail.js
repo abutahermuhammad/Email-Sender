@@ -4,6 +4,7 @@ import { EmailContext } from "../contexts/EmailContext";
 // Email Features Component
 export const EmailFunctions = () => {
     const [info, setInfo] = useState({});
+    const [emailStatus, setEmailStatus] = useState();
 
     const sendEmail = (id) => {
         let CYCLE = 0;
@@ -18,7 +19,19 @@ export const EmailFunctions = () => {
         return message;
     };
 
-    return { info, setInfo, sendEmail };
+    // Email Checker
+    const checkEmail = async (email) => {
+        const url = `${process.env.NEXT_PUBLIC_API_URL}/checkEmail?email=${email}`;
+
+        await fetch(url)
+            .then((res) => res.json())
+            .then((data) => setEmailStatus(data.valid));
+
+        return emailStatus;
+    };
+    console.log("EMAIL STATUS: ", emailStatus);
+
+    return { info, setInfo, sendEmail, checkEmail };
 };
 
 // Email Context hook

@@ -8,23 +8,27 @@ const EmailForm = () => {
     const router = useRouter();
     const [formMessage, setFormMessage] = useState("");
     const [referId, setReferId] = useState("");
-    const { sendEmail } = useEmail();
+    const { sendEmail, checkEmail } = useEmail();
 
     // Submit Button Handler
     const setReferIdHandler = (values, setSubmitting) => {
         setFormMessage("Preparing Info...");
         setSubmitting(true);
-        setInterval(500);
+        console.log(typeof checkEmail(values.email));
 
-        setFormMessage("Generating ID...");
-        let id = generateReferId(values);
+        if (checkEmail(values.email)) {
+            setFormMessage("Generating ID...");
+            let id = generateReferId(values);
 
-        setFormMessage("Sending email...");
-        setReferId(id);
+            setFormMessage("Sending email...");
+            setReferId(id);
 
-        setFormMessage("Redirecting...");
-        let status = sendEmail(referId);
-        console.log(status);
+            setFormMessage("Redirecting...");
+            let status = sendEmail(referId);
+            console.log(status);
+        } else {
+            setSubmitting(false);
+        }
 
         // setSubmitting(false);
     };
@@ -72,7 +76,6 @@ const EmailForm = () => {
                 >
                     {({ errors, isSubmitting }) => (
                         <Form className="ef_emailForm-form">
-                            {console.log(errors)}
                             {/* Form Title */}
                             <h4 className="ef_emailForm--title">
                                 Generate your Referral code
