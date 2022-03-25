@@ -9,6 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "deep-email-validator": "^0.1.21",
     "formik": "^2.2.9",
     "next": "12.1.0",
     "react": "17.0.2",

@@ -1,0 +1,119 @@
+@use './components/_color' as theme
+@use './components/_form'
+
+*
+  margin: 0
+  padding: 0
+*, *::before, *::after
+  box-sizing: border-box
+
+html,
+body
+  padding: 0
+  margin: 0
+  font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen, Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif
+
+body
+  background: theme.$bg-light
+
+a
+  color: inherit
+  text-decoration: none
+
+/*==============================*/
+/* Header                       */
+/*==============================*/
+.ef_navbar
+  nav
+    padding: 10px
+    text-align: center
+    a
+      font-size: 25px
+      font-weight: 600
+/*==============================*/
+/* Footer                       */
+/*==============================*/
+.ef_footer
+  padding: 20px 0
+  p
+    text-align: center
+    font-size: 14px
+
+/*==============================*/
+/* Email Form                   */
+/*==============================*/
+.ef_emailForm  // Email Form Section
+  width: 100%
+  min-height: calc( 100vh - 112px )
+  display: flex
+  justify-content: center
+  align-items: center
+  background: url('/img/bg.webp')
+  .ef_emailForm-form  // Email Form
+    width: 45vw
+    padding: 40px
+    display: flex
+    flex-direction: column
+    background: #fff
+    box-shadow: 0.00px 5.00px 15px 0px rgba(0,0,0,0.15)
+    .ef_emailForm--title  // Form Title
+      margin-bottom: 18px
+      text-align: center
+      font-size: 28px
+    .es_emailForm--state  // Form Submiting State
+      padding: 60px 0
+      p
+        font-size: 18px
+        text-align: center
+    .ef_emailForm--field  // Form Fields
+      margin-bottom: 10px
+      display: flex
+      gap: 20px
+      // input
+      //   width: 50%
+      &.--name  // Name Field
+      &.--button  // Submit Button
+        margin-top: 10px
+    p
+      font-size: 14px
+      font-weight: 500
+      &.--error  // Input Field's Error Stete
+        color: theme.$color-red
+@media screen and (max-width: 767px )
+  .ef_emailForm
+    .ef_emailForm-form
+      width: 80vw
+      padding: 40px
+      .ef_emailForm--title
+        font-size: 28px
+        margin-bottom: 18px
+      .ef_emailForm--field
+        margin-bottom: 10px
+        gap: 0px
+        flex-wrap: wrap
+        &.--name
+          input
+            width: 100%
+        &.--button
+          margin-top: 10px
+@media screen and (min-width: 768px ) and (max-width: 1024px )
+  .ef_emailForm
+    .ef_emailForm-form
+      width: 80vw
+@media screen and (min-width: 1025px )
+.ef_emailForm
+  .ef_emailForm-form
+    width: 45vw
+    padding: 40px
+    .ef_emailForm--title
+      font-size: 28px
+      margin-bottom: 18px
+    .ef_emailForm--field
+      margin-bottom: 10px
+      display: flex
+      gap: 20px
+      &.--name
+        input
+          width: 50%
+      &.--button
+        margin-top: 10px

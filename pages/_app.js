@@ -1,7 +1,14 @@
-import '../styles/globals.css'
+import { EmailContext } from "../contexts/EmailContext";
+import { EmailFunctions } from "../hooks/useEmail";
+import "../styles/globals.sass";
 
 function MyApp({ Component, pageProps }) {
-  return <Component {...pageProps} />
+    const eF = EmailFunctions();
+    return (
+        <EmailContext.Provider value={eF}>
+            <Component {...pageProps} />
+        </EmailContext.Provider>
+    );
 }
 
-export default MyApp
+export default MyApp;
