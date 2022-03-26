@@ -20,6 +20,10 @@ a
   color: inherit
   text-decoration: none
 
+.es_container
+  width: 80%
+  margin: 0 auto
+
 /*==============================*/
 /* Header                       */
 /*==============================*/
@@ -51,51 +55,69 @@ a
   background: url('/img/bg.webp')
   .ef_emailForm-form  // Email Form
     width: 45vw
-    padding: 40px
-    display: flex
-    flex-direction: column
+    position: relative
+    display: block
+    overflow: hidden
     background: #fff
     box-shadow: 0.00px 5.00px 15px 0px rgba(0,0,0,0.15)
-    .ef_emailForm--title  // Form Title
-      margin-bottom: 18px
+    .ef_emailForm--error
+      // margin-top: -100%
+      padding: 10px 40px
+      color: theme.$color-light
+      font-weight: 600
       text-align: center
-      font-size: 28px
-    .es_emailForm--state  // Form Submiting State
-      padding: 60px 0
-      p
-        font-size: 18px
-        text-align: center
-    .ef_emailForm--field  // Form Fields
-      margin-bottom: 10px
+      position: relative
+      top: -0px
+      left: 0
+      right: 0
+      background: theme.$color-red
+      .--active
+        margin-top: 0
+    .ef_emailForm-content
+      padding: 40px
       display: flex
-      gap: 20px
-      // input
-      //   width: 50%
-      &.--name  // Name Field
-      &.--button  // Submit Button
-        margin-top: 10px
-    p
-      font-size: 14px
-      font-weight: 500
-      &.--error  // Input Field's Error Stete
-        color: theme.$color-red
+      flex-direction: column
+      .ef_emailForm--title  // Form Title
+        margin-bottom: 18px
+        text-align: center
+        font-size: 28px
+      .es_emailForm--state  // Form Submiting State
+        padding: 60px 0
+        p
+          font-size: 18px
+          text-align: center
+      .ef_emailForm--field  // Form Fields
+        margin-bottom: 10px
+        display: flex
+        gap: 20px
+        // input
+        //   width: 50%
+        &.--name  // Name Field
+        &.--button  // Submit Button
+          margin-top: 10px
+      p
+        font-size: 14px
+        font-weight: 500
+        &.--error  // Input Field's Error Stete
+          color: theme.$color-red
 @media screen and (max-width: 767px )
   .ef_emailForm
     .ef_emailForm-form
       width: 80vw
-      padding: 40px
-      .ef_emailForm--title
-        font-size: 28px
-        margin-bottom: 18px
-      .ef_emailForm--field
-        margin-bottom: 10px
-        gap: 0px
-        flex-wrap: wrap
-        &.--name
-          input
-            width: 100%
-        &.--button
-          margin-top: 10px
+      .ef_emailForm-content
+        padding: 40px
+        .ef_emailForm--title
+          font-size: 28px
+          margin-bottom: 18px
+        .ef_emailForm--field
+          margin-bottom: 10px
+          gap: 0px
+          flex-wrap: wrap
+          &.--name
+            input
+              width: 100%
+          &.--button
+            margin-top: 10px
 @media screen and (min-width: 768px ) and (max-width: 1024px )
   .ef_emailForm
     .ef_emailForm-form
@@ -104,16 +126,32 @@ a
 .ef_emailForm
   .ef_emailForm-form
     width: 45vw
-    padding: 40px
-    .ef_emailForm--title
+    .ef_emailForm-content
+      padding: 40px
+      .ef_emailForm--title
+        font-size: 28px
+        margin-bottom: 18px
+      .ef_emailForm--field
+        margin-bottom: 10px
+        display: flex
+        gap: 20px
+        &.--name
+          input
+            width: 50%
+        &.--button
+          margin-top: 10px
+
+/*==============================*/
+/* Email Form                   */
+/*==============================*/
+.es_successful
+  width: 100%
+  min-height: calc( 100vh - 112px )
+  background: url('/img/bg.webp')
+  .es_container
+    padding: 60px 0
+    .es_successful--title
+      margin-bottom: 15px
+      font-size: 38px
+    .es_successful--subtitle
       font-size: 28px
-      margin-bottom: 18px
-    .ef_emailForm--field
-      margin-bottom: 10px
-      display: flex
-      gap: 20px
-      &.--name
-        input
-          width: 50%
-      &.--button
-        margin-top: 10px

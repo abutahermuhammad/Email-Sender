@@ -6,28 +6,59 @@ import { generateReferId } from "../../../../utils/refferal.utils";
 
 const EmailForm = () => {
     const router = useRouter();
-    const [formMessage, setFormMessage] = useState("");
-    const [referId, setReferId] = useState("");
-    const { sendEmail, checkEmail } = useEmail();
+    const [formMessage, setFormMessage] = useState("Validating email...");
+    const { errorMessage, sendEmail, checkEmail } = useEmail();
 
     // Submit Button Handler
-    const setReferIdHandler = (values, setSubmitting) => {
-        setFormMessage("Preparing Info...");
-        setSubmitting(true);
-        console.log(typeof checkEmail(values.email));
+    const setReferIdHandler = async (values, setSubmitting) => {
+        let emailValidity = false;
+        let referralID = "";
+        let emailSended = false;
 
-        if (checkEmail(values.email)) {
+        await setSubmitting(true);
+
+        // Validating Email
+        try {
+            emailValidity = await checkEmail(values.email);
+            console.log("EMAIL VALIDATION: ", emailValidity);
+        } catch {
+            setFormMessage("Something went wrong!");
+            console.error("Can't check email validation.");
+            // setSubmitting(false);
+        }
+
+        // When Email Validated I'm moving to next state to generate a unique referral ID/
+        if (!errorMessage && emailValidity) {
             setFormMessage("Generating ID...");
-            let id = generateReferId(values);
 
+            referralID = await generateReferId(values);
+            console.log("REFERRAL ID: ", referralID);
+
+            if (!referralID) errorMessage("An error occurred on ID generation");
+        }
+
+        if (!errorMessage && referralID) {
             setFormMessage("Sending email...");
-            setReferId(id);
+            // setReferId(referralID);
 
+            try {
+                emailSended = await sendEmail(values.email, referralID);
+                console.log("EMAIL SENDED: ", emailSended);
+            } catch {
+                console.log("Can not send email.");
+
+                if (!referralID)
+                    errorMessage("An error occurred on sending email");
+            }
+        }
+
+        if (!errorMessage && emailValidity && referralID && emailSended) {
             setFormMessage("Redirecting...");
-            let status = sendEmail(referId);
-            console.log(status);
+            await router.push(`/successful`);
         } else {
-            setSubmitting(false);
+            setFormMessage("Something went wrong!");
+            if (errorMessage) errorMessage("Something went wrong!");
+            // setSubmitting(false);
         }
 
         // setSubmitting(false);
@@ -76,85 +107,100 @@ const EmailForm = () => {
                 >
                     {({ errors, isSubmitting }) => (
                         <Form className="ef_emailForm-form">
-                            {/* Form Title */}
-                            <h4 className="ef_emailForm--title">
-                                Generate your Referral code
-                            </h4>
-
-                            {isSubmitting ? (
-                                <>
-                                    <div className="es_emailForm--state">
-                                        <p>{formMessage}</p>
-                                    </div>
-                                </>
-                            ) : (
-                                <>
-                                    {/* Name Area */}
-                                    <div className="ef_emailForm--field --name">
-                                        {/* First Name Field */}
-                                        <Field
-                                            className={
-                                                errors.firstName
-                                                    ? `__error`
-                                                    : ""
-                                            }
-                                            placeholder="First name"
-                                            name="firstName"
-                                        />
-
-                                        {/* Last Name Field */}
-                                        <Field
-                                            className={
-                                                errors.lastName ? `__error` : ""
-                                            }
-                                            placeholder="Last name"
-                                            name="lastName"
-                                        />
-                                    </div>
-
-                                    {/* Email Area */}
-                                    <div className="ef_emailForm--field">
-                                        <Field
-                                            className={
-                                                errors.email ? `__error` : ""
-                                            }
-                                            type="email"
-                                            placeholder="Email address"
-                                            name="email"
-                                        />
-                                    </div>
-
-                                    {/* Email Area */}
-                                    <div className="ef_emailForm--field">
-                                        <Field
-                                            className={
-                                                errors.email ? `__error` : ""
-                                            }
-                                            placeholder="Confirm email address"
-                                            name="email1"
-                                        />
-                                    </div>
-
-                                    {/* Email Error Message */}
-                                    <div className="ef_emailForm--field">
-                                        <ErrorMessage
-                                            name="email"
-                                            className="--error"
-                                            component="p"
-                                        />
-                                    </div>
-
-                                    {/* Form Submit */}
-                                    <div className="ef_emailForm--field --button">
-                                        <button
-                                            type="submit"
-                                            disabled={isSubmitting}
-                                        >
-                                            Submit
-                                        </button>
-                                    </div>
-                                </>
+                            {/* Error alert */}
+                            {errorMessage && (
+                                <div className={`ef_emailForm--error`}>
+                                    <p>{errorMessage}</p>
+                                </div>
                             )}
+
+                            <div className="ef_emailForm-content">
+                                {/* Form Title */}
+                                <h4 className="ef_emailForm--title">
+                                    Generate your Referral code
+                                </h4>
+
+                                {isSubmitting || errorMessage ? (
+                                    <>
+                                        <div className="es_emailForm--state">
+                                            <p>{formMessage}</p>
+                                        </div>
+                                    </>
+                                ) : (
+                                    <>
+                                        {/* Name Area */}
+                                        <div className="ef_emailForm--field --name">
+                                            {/* First Name Field */}
+                                            <Field
+                                                className={
+                                                    errors.firstName
+                                                        ? `__error`
+                                                        : ""
+                                                }
+                                                placeholder="First name"
+                                                name="firstName"
+                                            />
+
+                                            {/* Last Name Field */}
+                                            <Field
+                                                className={
+                                                    errors.lastName
+                                                        ? `__error`
+                                                        : ""
+                                                }
+                                                placeholder="Last name"
+                                                name="lastName"
+                                            />
+                                        </div>
+
+                                        {/* Email Area */}
+                                        <div className="ef_emailForm--field">
+                                            <Field
+                                                className={
+                                                    errors.email
+                                                        ? `__error`
+                                                        : ""
+                                                }
+                                                type="email"
+                                                placeholder="Email address"
+                                                name="email"
+                                            />
+                                        </div>
+
+                                        {/* Email Area */}
+                                        <div className="ef_emailForm--field">
+                                            <Field
+                                                className={
+                                                    errors.email
+                                                        ? `__error`
+                                                        : ""
+                                                }
+                                                placeholder="Confirm email address"
+                                                name="email1"
+                                            />
+                                        </div>
+
+                                        {/* Email Error Message */}
+                                        <div className="ef_emailForm--field">
+                                            <ErrorMessage
+                                                name="email"
+                                                className="--error"
+                                                component="p"
+                                            />
+                                        </div>
+
+                                        {/* Form Submit */}
+                                        <div className="ef_emailForm--field --button">
+                                            <button
+                                                type="submit"
+                                                disabled={isSubmitting}
+                                            >
+                                                Submit
+                                            </button>
+                                        </div>
+                                    </>
+                                )}
+                            </div>
                         </Form>
                     )}
                 </Formik>
