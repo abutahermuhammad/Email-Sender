@@ -1,13 +1,14 @@
-import { EmailContext } from "../contexts/EmailContext";
-import { EmailFunctions } from "../hooks/useEmail";
+import { MessageContext } from "../contexts/MessageContext";
+import { MessageFunctions } from "../hooks/useMessage";
 import "../styles/globals.sass";
 
 function MyApp({ Component, pageProps }) {
-    const eF = EmailFunctions();
+    const eF = MessageFunctions();
+
     return (
-        <EmailContext.Provider value={eF}>
+        <MessageContext.Provider value={eF}>
             <Component {...pageProps} />
-        </EmailContext.Provider>
+        </MessageContext.Provider>
     );
 }
 

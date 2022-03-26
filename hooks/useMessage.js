@@ -1,10 +1,11 @@
 import { useContext, useState } from "react";
-import { EmailContext } from "../contexts/EmailContext";
+import { MessageContext } from "../contexts/MessageContext";
 
-// Email Features Component
-export const EmailFunctions = () => {
+export const MessageFunctions = () => {
     const [info, setInfo] = useState({});
     const [errorMessage, setErrorMessage] = useState("");
+
+    const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
     /**
      * sendEmail
@@ -17,14 +18,14 @@ export const EmailFunctions = () => {
     const sendEmail = async (email, refferalID) => {
         let CYCLE = 0;
         let status = false;
-        const url = `${process.env.NEXT_PUBLIC_API_URL}/sendEmail?email=${email}&rfi=${refferalID}`;
+        const url = `${API_URL}/sendEmail?email=${email}&rfi=${refferalID}`;
 
         if (CYCLE <= 3) {
             CYCLE += 1;
             await fetch(url)
                 .then((res) => res.json())
-                .then((data) => (status = true))
-                .catch((err) => (status = false));
+                .then(() => (status = true))
+                .catch(() => (status = false));
         }
 
         return status;
@@ -38,7 +39,7 @@ export const EmailFunctions = () => {
      * @returns
      */
     const checkEmail = async (email) => {
-        const url = `${process.env.NEXT_PUBLIC_API_URL}/checkEmail?email=${email}`;
+        const url = `${API_URL}/checkEmail?email=${email}`;
         let status = false;
 
         await fetch(url)
@@ -60,10 +61,10 @@ export const EmailFunctions = () => {
 };
 
 // Email Context hook
-export const useEmail = () => {
-    const emailCTX = useContext(EmailContext);
+export const useMessage = () => {
+    const messageCTX = useContext(MessageContext);
 
-    return emailCTX;
+    return messageCTX;
 };
 
-export default useEmail;
+export default useMessage;

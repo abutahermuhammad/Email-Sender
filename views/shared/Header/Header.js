@@ -6,7 +6,7 @@ const Header = () => {
             <header className="ef_navbar">
                 <nav>
                     <Link href={`/`}>
-                        <a>emailForm</a>
+                        <a>EmailForm</a>
                     </Link>
                 </nav>
             </header>

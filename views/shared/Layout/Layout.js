@@ -1,9 +1,13 @@
 import Footer from "../Footer/Footer";
 import Header from "../Header/Header";
+import Meta from "../Meta/Meta";
 
 const Layout = ({ className, children }) => {
     return (
         <>
+            {/* Webpage meta tags */}
+            <Meta />
+
             {/* Webpage Header */}
             <Header />
 

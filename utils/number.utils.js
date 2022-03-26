@@ -2,8 +2,8 @@
  * getRandomNumber
  *
  * @description This function generates random number within given number length.
- * @param {*} max
- * @returns
+ * @param {Number} max
+ * @returns {Number}
  */
 export const getRandomNumber = (max) => {
     // Generating Random Number

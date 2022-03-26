@@ -1,13 +1,13 @@
 import { ErrorMessage, Field, Form, Formik } from "formik";
 import { useRouter } from "next/router";
 import { useState } from "react";
-import useEmail from "../../../../hooks/useEmail";
+import useMessage from "../../../../hooks/useMessage";
 import { generateReferId } from "../../../../utils/refferal.utils";
 
 const EmailForm = () => {
-    const router = useRouter();
+    const router = useRouter(); // This Next.Js hook used for redirecting to `/successful` page on success.
     const [formMessage, setFormMessage] = useState("Validating email...");
-    const { errorMessage, sendEmail, checkEmail } = useEmail();
+    const { errorMessage, sendEmail, checkEmail } = useMessage();
 
     // Submit Button Handler
     const setReferIdHandler = async (values, setSubmitting) => {
