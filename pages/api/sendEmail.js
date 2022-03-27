@@ -1,4 +1,8 @@
+import cors from "cors";
 import { sendEmail } from "../../utils/email.utils";
+
+// Initializing the CORS
+cors();
 
 /**
  * @description his function takes two parameter; email => Receiver Email; rfi => Referral ID.
@@ -6,11 +10,11 @@ import { sendEmail } from "../../utils/email.utils";
  * @param {*} res
  */
 export default async function handler(req, res) {
-    const { email, rfi } = req.query;
+	const { email, rfi } = req.query;
 
-    // SendGrid Email Sender
-    let status = sendEmail(email, rfi);
+	// SendGrid Email Sender
+	let status = sendEmail(email, rfi);
 
-    // Response
-    res.json({ status });
+	// Response
+	res.json({ status });
 }

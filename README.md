@@ -2,6 +2,32 @@
 
 ## Getting Started
 
+```bash
+npm install
+# or
+yarn install
+```
+
+Create an `.env` file and configure accordingly.
+
+```bash
+NEXT_PUBLIC_API_URL     = http://domain-name.com/api
+
+# Send Grid
+NEXT_PUBLIC_SG_SENDER           = example@mail.com
+NEXT_PUBLIC_SG_EMIAIL_SUBJECT   = Your email subject (Optional)
+NEXT_PUBLIC_SENDGRID_API_KEY    = XXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+
+# Email Validator
+# This configuration controls the email validator function.
+# You can easily enable/Disable any feature or even stop validation by giving falsy value to every option
+NEXT_PUBLIC_EV_REGEX        = true (Optional || Defaut)
+NEXT_PUBLIC_EV_MX           = true (Optional || Defaut)
+NEXT_PUBLIC_EV_TYPO         = true (Optional || Defaut)
+NEXT_PUBLIC_EV_DISPOSABLE   = true (Optional || Defaut)
+NEXT_PUBLIC_EV_SMTP         = false (Optional || Defaut)
+```
+
 First, run the development server:
 
 ```bash

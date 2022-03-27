@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@sendgrid/mail": "^7.6.2",
+    "cors": "^2.8.5",
     "deep-email-validator": "^0.1.21",
     "formik": "^2.2.9",
     "next": "12.1.0",
