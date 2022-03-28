@@ -124,6 +124,7 @@ sequenceDiagram
         SV-->> FN: false
     end
     FS ->>+ EV: Email Address
+    EV ->>+ RID: Email Address
     EV ->>+ SE: Email Address
 
 
