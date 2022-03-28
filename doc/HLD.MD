@@ -62,7 +62,6 @@ controller functions to generate unique referral ID and
 If we take referral IF generator work flow as a sample, workflow diagram will be as shown in diagram
 
 ```mermaid
-%%{init: {'securityLevel': 'loose', 'theme':'base'}}%%
 flowchart TD
     id1([Start]) --> id2[\User fills registration Form with First name, Last name, Email\]
     id2 --> id3{onClick of submit button. \nForm filled properly?}
@@ -144,7 +143,6 @@ sequenceDiagram
 If we take email validator's work flow as a sample, workflow diagram will be as shown in diagram
 
 ```mermaid
-%%{init: {'securityLevel': 'loose', 'theme':'base'}}%%
 flowchart TD
     subgraph COMPONENT
         S([Start]) --> MI[\ Email \]
@@ -169,7 +167,6 @@ flowchart TD
 If we take ID Generator's work flow as a sample, workflow diagram will be as shown in diagram
 
 ```mermaid
-%%{init: {'securityLevel': 'loose', 'theme':'base'}}%%
 flowchart TD
     S([Start]) --> FI[\ First name, \nLast name, \nEmail \]
     FI --> RN[ Random Number\n length: 4 ]
@@ -195,7 +192,6 @@ flowchart TD
 If we take email sender's work flow as a sample, workflow diagram will be as shown in diagram
 
 ```mermaid
-%%{init: {'securityLevel': 'loose', 'theme':'base'}}%%
 flowchart TD
     subgraph COMPONENT
         S([Start]) --> FI[\Input\n Email, Referral ID\]
