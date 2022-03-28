@@ -55,13 +55,14 @@ controller functions to generate unique referral ID and
 
 # 2. <a name="system-design">System Design</a>
 
-## <a name="application-design">Application Design</a>
+## <a name="application-design">Application Design:</a>
 
 ### <a name="process-flow-chart">Process Flow Chart</a>
 
 If we take referral IF generator work flow as a sample, workflow diagram will be as shown in diagram
 
 ```mermaid
+%%{init: {'securityLevel': 'loose', 'theme':'base'}}%%
 flowchart TD
     id1([Start]) --> id2[\User fills registration Form with First name, Last name, Email\]
     id2 --> id3{onClick of submit button. \nForm filled properly?}
@@ -78,44 +79,150 @@ flowchart TD
 
 ```
 
-### <a name="information-flow">Information Flow</a>
-
 ### <a name="sequence-diagram"> Sequence Diagram: </a>
 
+<!-- %%{init: {'securityLevel': 'loose', 'theme':'base'}}%% -->
+
 ```mermaid
+%%{init: {'securityLevel': 'loose', 'theme':'base'}}%%
 sequenceDiagram
     participant FN as Form
     participant SV as Form Validator
+    participant FS as Form State
+    participant EV as Email Validator
+    participant RID as Referral ID
+    participant SE as Send Email
 
 
-    Note over FN,SV: First name
-    FN-->>SV: Input valid?
-    loop Fired onChange
-        FN-->SV: Field gets red on error.
+    loop First name
+        FN ->>+ SV: Is input valid?
+        SV--> FN: false
+        SV ->> FS: true
     end
+    FS ->>+ RID: First Name
 
-    Note over FN,SV: Last name
-    FN ->> SV: Input valid?
-    loop Fired onChange
-        FN-->SV: Field gets red on error.
-    end
 
-    Note over FN,SV: Email
-    FN -->> SV: Input valid?
-    loop Fired onChange
-        FN-->SV: Field gets red on error.
+    loop Last name
+        FN ->> SV: Is input valid?
+        SV ->>+ FS: true
+        SV-->> FN: false
     end
+    FS ->>+ RID: Last Name
+    RID ->>+ SE: Referral ID
+
+
+    loop Email
+        FN ->> SV: Is input valid?
+        SV ->>+ FS: true
+        SV-->> FN: false
+    end
+    FS ->>+ EV: Email Address
+
+
+    loop Email 1
+        FN ->> SV: Is input valid?
+        SV ->>+ FS: true
+        SV-->> FN: false
+    end
+    FS ->>+ EV: Email Address
+    EV ->>+ SE: Email Address
+
+
 
 ```
 
 ## <a name="component-design"> Component Design: </a>
 
-## <a name="key-design-considerations"> Key Design Considerations </a>
+### <a name="key-design-considerations"> Key Design Considerations </a>
 
 -   Generate Referral ID component has been implemented as separate service
 -   Send email, email validation side effect functional components are implemented as separate service(As API) apart from the main component, these can be invoked by other applications as well through API endpoint.
 
-## <a name="api-catalogue"> API Catalogue: </a>
+### **Component: Email Validator**
+
+**Process Flow**
+If we take email validator's work flow as a sample, workflow diagram will be as shown in diagram
+
+```mermaid
+%%{init: {'securityLevel': 'loose', 'theme':'base'}}%%
+flowchart TD
+    subgraph COMPONENT
+        S([Start]) --> MI[\ Email \]
+        MI --> VC[\ Validator \n Configuration \]
+        VC --> VF[Validate]
+        VF --> SUCCESS{Valid email?}
+        SUCCESS --> |true| VR[JSON Response]
+        SUCCESS --> |false| VR[JSON Response]
+        VR --> E((Result))
+        E --> END([End])
+    end
+
+    subgraph PROCESS ENV
+        ENV[\Regex, MX, Typo, \nDisposable, SMTP\] --> VC
+    end
+
+```
+
+### **Component: ID Generator**
+
+**Process Flow**
+If we take ID Generator's work flow as a sample, workflow diagram will be as shown in diagram
+
+```mermaid
+%%{init: {'securityLevel': 'loose', 'theme':'base'}}%%
+flowchart TD
+    S([Start]) --> FI[\ First name, \nLast name, \nEmail \]
+    FI --> RN[ Random Number\n length: 4 ]
+    FI --> FN[ First Name \n1st 2Char + Last 2Char \n length: 4]
+    FI --> LN[ Last Name \n1st 2Char + Last 2Char \n length: 4]
+    FI --> D[ Date \nUTC Day+Last 2Char of UTC Year+UTC Months\n length: 5-6]
+    FI --> EA[ Email Address \n1st 2Char domain name + Top Level Domain \n length: UNKNOWN]
+    RN --> RID[Referral ID]
+    FN --> RID[Referral ID]
+    LN --> RID[Referral ID]
+    D --> RID[Referral ID]
+    EA --> RID[Referral ID Generating]
+    RID --> GI{ Valid ID?}
+    GI --> |false| RN
+    GI --> |true| R((Result))
+    R --> E([end])
+
+```
+
+### **Component: Email Sender**
+
+**Process Flow**
+If we take email sender's work flow as a sample, workflow diagram will be as shown in diagram
+
+```mermaid
+%%{init: {'securityLevel': 'loose', 'theme':'base'}}%%
+flowchart TD
+    subgraph COMPONENT
+        S([Start]) --> FI[\Input\n Email, Referral ID\]
+        FI --> MO[\Message Object\]
+        MO --> SE[Send Email]
+        SE --> SUCCESS{Request \nsuccessful?}
+        SUCCESS --> |true| SR[STATUS: 200]
+        SUCCESS --> |false| SW[STATUS: 500]
+        SR --> E((Result))
+        SW --> E((Result))
+        E --> END([END])
+
+    end
+
+    subgraph SYSTEM
+        ENV[\SG API,\n Sender email,\n Email Subject\] --> MO
+        ENV --> |API Key| SGI[SentGrid Client Initialization]
+        SGI --> |SendGrid Client| SE
+    end
+
+    subgraph CONSTANT
+        ET[Email Template] --> MO
+    end
+
+```
+
+### <a name="api-catalogue"> API Catalogue: </a>
 
 | Sr. No. | Name Of API | Description                          | Input              | Output  | Access Level |
 | ------- | ----------- | ------------------------------------ | ------------------ | ------- | ------------ |
@@ -136,15 +243,5 @@ Apart form infra level security here are some sample application level security 
 [This section will capture the performance aspects of the application in scope]
 
 # <a name="appendices"> Appendices: </a>
-
-## <a name="appendix-1-comments-matrix"> Appendix .1 Comments Matrix: </a>
-
-Since there is no formal tool finalized currently for logging comments on various document deliverables,
-Comments Matrix is being put here to ensure comments are being tracked and resolved. Once a formal tool is
-identified, this process might change for future deliverables.
-| S. No | IRD Review Comments | Date Raised | Vendor Remarks |
-| --- | --- | --- | ---|
-| 1 | --- | --- | ---|
-| 2 | --- | --- | ---|
 
 # <a name="information-flow">Information Flow </a>

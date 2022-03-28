@@ -22,14 +22,16 @@ const EV_SMTP = toBoolean(process.env.NEXT_PUBLIC_EV_SMTP) || false;
  * @returns
  */
 export const validateEmail = (email) => {
-	return validate({
+	let config = {
 		email: email,
 		validateRegex: EV_REGEX,
 		validateMx: EV_MX,
 		validateTypo: EV_TYPO,
 		validateDisposable: EV_DISPOSABLE,
 		validateSMTP: EV_SMTP,
-	});
+	};
+
+	return validate(config);
 };
 
 /*=========================================*/
