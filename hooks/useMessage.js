@@ -17,15 +17,20 @@ export const MessageFunctions = () => {
 	 */
 	const sendEmail = async (email, refferalID) => {
 		let CYCLE = 0;
-		let status = false;
+		let error;
+		let status;
 		const url = `${API_URL}/sendEmail?email=${email}&rfi=${refferalID}`;
+		// const url = `${API_URL}/sendEmaail?email=${email}&rfi=${refferalID}`;  //This line can be unchecked for testing out how the 'CYCLE' concept works.
 
-		if (CYCLE <= 3) {
-			CYCLE += 1;
-			await fetch(url)
-				.then((res) => res.json())
-				.then(() => (status = true))
-				.catch(() => (status = false));
+		if (CYCLE < 3) {
+			for (CYCLE; CYCLE < 3; CYCLE++) {
+				await fetch(url)
+					.then((res) => res.json())
+					.then(() => (status = true))
+					.catch(() => (status = false));
+
+				if (status) return status;
+			}
 		}
 
 		return status;

@@ -24,7 +24,6 @@ const EmailForm = () => {
 		} catch {
 			setFormMessage("Something went wrong!");
 			console.error("Can't check email validation.");
-			// setSubmitting(false);
 		}
 
 		// When Email Validated I'm moving to next state to generate a unique referral ID/
@@ -39,7 +38,6 @@ const EmailForm = () => {
 
 		if (!errorMessage && referralID) {
 			setFormMessage("Sending email...");
-			// setReferId(referralID);
 
 			try {
 				emailSended = await sendEmail(values.email, referralID);
